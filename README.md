@@ -1,4 +1,4 @@
 rasp
 ====
 
-Rasp music library
+Rasp music library manager
