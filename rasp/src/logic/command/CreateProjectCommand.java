@@ -32,6 +32,9 @@ public class CreateProjectCommand implements Command {
       createTable(DDL.CREATE_TABLE_ARTIST);
       createTable(DDL.CREATE_TABLE_ALBUM);
       createTable(DDL.CREATE_TABLE_TRACK);
+      createTable(DDL.CREATE_TABLE_GUEST_ARTIST);
+      createTable(DDL.CREATE_TABLE_COMPOSER);
+      createTable(DDL.CREATE_TABLE_PERFORMER);
    }
 
    private void createTable(Object sql) throws SQLException {

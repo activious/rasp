@@ -1,6 +1,7 @@
 package util.sql;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class Query<T> {
    private final Object sql;
@@ -24,7 +25,7 @@ public class Query<T> {
       return stmtPrep;
    }
 
-   public void prepareToExecute(PreparedStatement s, T t) {
+   public void prepareToExecute(PreparedStatement s, T t) throws SQLException {
       stmtPrep.prepare(s, t);
    }
 

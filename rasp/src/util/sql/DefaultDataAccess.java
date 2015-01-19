@@ -156,6 +156,7 @@ public class DefaultDataAccess<T extends HasKey<K>, K> implements
       ResultSet r = null;
       try {
          s = conn.get().prepareStatement(sql.toString());
+         statementPreparer.prepare(s, null);
          r = s.executeQuery();
          while (r.next()) {
             items.add(itemCreator.createFrom(r));
