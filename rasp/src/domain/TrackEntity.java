@@ -10,6 +10,7 @@ public class TrackEntity extends PersistedEntity<Integer> {
    private Set<ArtistEntity> guestArtists, composers, performers;
    
    public TrackEntity() {
+      title = "";
       guestArtists = new HashSet<>();
       composers = new HashSet<>();
       performers = new HashSet<>();

@@ -30,7 +30,7 @@ public class TrackPanel extends JPanel implements Editor {
    public TrackPanel(TrackEntity track) {
       setOpaque(false);
       setLayout(new GridBagLayout());
-      //setBackground(new Color(200,200,255));
+      // setBackground(new Color(200,200,255));
 
       initComponents();
       layoutComponents();
@@ -118,9 +118,18 @@ public class TrackPanel extends JPanel implements Editor {
       if (!editable)
          return;
 
+      saveFields();
+
       currentTrack.setTitle(editedTrack.getTitle());
       currentTrack.setDuration(editedTrack.getDuration());
       detailsPanel.saveEdit();
+   }
+
+   private void saveFields() {
+      editedTrack.setTitle(titleField.getText());
+
+      if (!durationField.getText().isEmpty())
+         editedTrack.setDuration(Integer.parseInt(durationField.getText()));
    }
 
    @Override

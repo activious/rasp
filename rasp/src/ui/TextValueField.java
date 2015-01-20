@@ -90,7 +90,7 @@ public class TextValueField<T> extends ValueComponent<T> {
 
    private void layoutComponents() {
       removeAll();
-      
+
       if (editable) {
          add(tfEditable);
          if (canAdd)
@@ -101,11 +101,11 @@ public class TextValueField<T> extends ValueComponent<T> {
             add(btnDelete);
       }
    }
-   
+
    public void setCanDelete(boolean b) {
       canDelete = b;
    }
-   
+
    public void update() {
       layoutComponents();
    }
@@ -113,8 +113,14 @@ public class TextValueField<T> extends ValueComponent<T> {
    @Override
    public void setValue(T value) {
       super.setValue(value);
-      lblStatic.setText(representer.apply(value));
-      tfEditable.setText(representer.apply(value));
+      if (value != null) {
+         lblStatic.setText(representer.apply(value));
+         tfEditable.setText(representer.apply(value));
+      }
+   }
+   
+   public String getText() {
+      return tfEditable.getText();
    }
 
    public void setBold(boolean b) {
@@ -137,7 +143,7 @@ public class TextValueField<T> extends ValueComponent<T> {
 
       this.editable = editable;
 
-      if (editable)
+      if (editable && getValue() != null)
          tfEditable.setText(representer.apply(getValue()));
 
       removeAll();

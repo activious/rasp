@@ -7,6 +7,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
+import logic.command.CreateAlbumCommand;
 import logic.command.RevertProjectCommand;
 import config.Config;
 
@@ -63,7 +64,9 @@ public class TopMenuBar extends JMenuBar {
       add(mAdd);
 
       JMenuItem iAddNewAlbum = new JMenuItem(ITEM_ADD_NEW_ALBUM, MN_ADD_NEW_ALBUM);
-      iAddNewAlbum.addActionListener(e -> {});
+      iAddNewAlbum.addActionListener(e -> {
+         new CreateAlbumCommand().execute();
+      });
       mAdd.add(iAddNewAlbum);
       
       //mAdd.addSeparator();

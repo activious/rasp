@@ -45,12 +45,13 @@ public class TrackDetailsPanel extends JPanel implements Editor {
       initComponents();
       layoutComponents();
 
-      //setBackground(new Color(0, 0, 255));
+      // setBackground(new Color(0, 0, 255));
    }
 
    private void initComponents() {
       primaryArtistField =
-            new TextValueField<ArtistEntity>(15, false, true, false, a -> a.getName());
+            new TextValueField<ArtistEntity>(15, false, true, false,
+                                             a -> a.getName());
 
       pGuestArtists = createMultiValuePanel();
       pComposers = createMultiValuePanel();
@@ -64,8 +65,10 @@ public class TrackDetailsPanel extends JPanel implements Editor {
       gbc.insets = new Insets(1, 10, 1, 1);
       gbc.gridy = 0;
 
-      addToLayout(ComponentFactory.createDefaultLabel("Primær kunstner:"),
-                  primaryArtistField, gbc);
+      if (editable || currentTrack != null &&
+          currentTrack.getPrimaryArtist() != null)
+         addToLayout(ComponentFactory.createDefaultLabel("Primær kunstner:"),
+                     primaryArtistField, gbc);
 
       if (editable || currentTrack != null &&
           !currentTrack.getGuestArtists().isEmpty())
@@ -177,16 +180,20 @@ public class TrackDetailsPanel extends JPanel implements Editor {
    public void saveEdit() {
       if (!editable)
          return;
+      
+      saveFields();
 
       currentTrack.setNumber(editedTrack.getNumber());
-      currentTrack.setTitle(editedTrack.getTitle());
-      currentTrack.setDuration(editedTrack.getDuration());
       currentTrack.setPrimaryArtist(editedTrack.getPrimaryArtist());
       currentTrack.setGuestArtists(editedTrack.getGuestArtists());
       currentTrack.setComposers(editedTrack.getComposers());
       currentTrack.setPerformers(editedTrack.getPerformers());
    }
    
+   private void saveFields() {
+      // TODO
+   }
+
    @Override
    public void revert() {
       applyTrackInfo();
@@ -205,17 +212,17 @@ public class TrackDetailsPanel extends JPanel implements Editor {
       this.editable = editable;
 
       primaryArtistField.setEditable(editable);
-      
+
       for (TextValueField<ArtistEntity> f : guestArtistFields) {
          f.setCanDelete(editable);
          f.update();
       }
-      
+
       for (TextValueField<ArtistEntity> f : composerFields) {
          f.setCanDelete(editable);
          f.update();
       }
-      
+
       for (TextValueField<ArtistEntity> f : performerFields) {
          f.setCanDelete(editable);
          f.update();
@@ -245,64 +252,63 @@ public class TrackDetailsPanel extends JPanel implements Editor {
 
       layoutComponents();
    }
-   
+
    private TextValueField<ArtistEntity> createGuestArtistField() {
       TextValueField<ArtistEntity> f = createField();
       f.addItemAddedListener(e -> guestArtistAdded(e));
       f.addItemRemovedListener(e -> guestArtistRemoved(e));
       return f;
    }
-   
+
    private TextValueField<ArtistEntity> createComposerField() {
       TextValueField<ArtistEntity> f = createField();
       f.addItemAddedListener(e -> composerAdded(e));
       f.addItemRemovedListener(e -> composerRemoved(e));
       return f;
    }
-   
+
    private TextValueField<ArtistEntity> createPerformerField() {
       TextValueField<ArtistEntity> f = createField();
       f.addItemAddedListener(e -> performerAdded(e));
       f.addItemRemovedListener(e -> performerRemoved(e));
       return f;
    }
-   
+
    private TextValueField<ArtistEntity> createField() {
       return new TextValueField<>(15, true, true, false, a -> a.getName());
    }
-   
+
    private void guestArtistAdded(ItemEvent<String> e) {
       ArtistEntity a = Model.getInstance().createArtist();
       a.setName(e.getItem());
       editedTrack.addGuestArtist(a);
       itemAdded(e);
-      System.out.println("Added guest artist.");
    }
-   
+
    private void guestArtistRemoved(ItemEvent<ArtistEntity> e) {
       editedTrack.removeGuestArtist(e.getItem());
       itemRemoved(e);
    }
-   
+
    private void composerAdded(ItemEvent<String> e) {
       ArtistEntity a = Model.getInstance().createArtist();
       a.setName(e.getItem());
       editedTrack.addComposer(a);
       itemAdded(e);
    }
-   
+
    private void composerRemoved(ItemEvent<ArtistEntity> e) {
       editedTrack.removeComposer(e.getItem());
       itemRemoved(e);
    }
-   
+
    private void performerAdded(ItemEvent<String> e) {
       ArtistEntity a = Model.getInstance().createArtist();
       a.setName(e.getItem());
       editedTrack.addPerformer(a);
       itemAdded(e);
    }
-   
+
    private void performerRemoved(ItemEvent<ArtistEntity> e) {
       editedTrack.removePerformer(e.getItem());
       itemRemoved(e);
@@ -310,10 +316,11 @@ public class TrackDetailsPanel extends JPanel implements Editor {
 
    private void itemAdded(ItemEvent<String> event) {
       @SuppressWarnings("unchecked")
-      TextValueField<ArtistEntity> f = (TextValueField<ArtistEntity>) event.getSource();
+      TextValueField<ArtistEntity> f =
+            (TextValueField<ArtistEntity>) event.getSource();
       f.setEditable(false);
       newFields.remove(f);
-      
+
       Container p = f.getParent();
       f = createField();
       newFields.add(f);
@@ -322,7 +329,8 @@ public class TrackDetailsPanel extends JPanel implements Editor {
 
    private void itemRemoved(ItemEvent<ArtistEntity> event) {
       @SuppressWarnings("unchecked")
-      TextValueField<ArtistEntity> f = (TextValueField<ArtistEntity>) event.getSource();
+      TextValueField<ArtistEntity> f =
+            (TextValueField<ArtistEntity>) event.getSource();
       Container p = f.getParent();
       p.remove(f);
       p.validate();

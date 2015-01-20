@@ -16,6 +16,7 @@ public class AlbumEntity extends PersistedEntity<Integer> {
    public AlbumEntity(AlbumEntity other) {
       title = other.getTitle();
       albumArtist = other.getAlbumArtist();
+      trackList = other.getTrackList();
    }
 
    public String getTitle() {

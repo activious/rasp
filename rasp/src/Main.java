@@ -20,6 +20,7 @@ import radams.gracenote.webapi.GracenoteMetadata;
 import radams.gracenote.webapi.GracenoteWebAPI;
 import ui.Window;
 import ui.album.AlbumDialog;
+import logic.command.CreateAlbumCommand;
 import logic.command.CreateProjectCommand;
 import logic.command.ExitCommand;
 import logic.command.FetchArtistsCommand;
@@ -131,57 +132,9 @@ public class Main {
    }
    
    private static void testWindow() {
-      createAlbums();
-      
       Window win = Window.getInstance();
       win.setVisible(true);
       win.updateAlbumList();
-   }
-   
-   private static void createAlbums() {
-      ArtistEntity a1 = new ArtistEntity();
-      a1.setName("Harold Faltermeyer");
-      ArtistEntity a2 = new ArtistEntity();
-      a2.setName("Somal Wroth");
-      ArtistEntity a3 = new ArtistEntity();
-      a3.setName("Reall Mommman");
-      ArtistEntity a4 = new ArtistEntity();
-      a4.setName("Maverick Olson");
-      ArtistEntity a5 = new ArtistEntity();
-      a5.setName("Erica Wild");
-      ArtistEntity a6 = new ArtistEntity();
-      a6.setName("Simona Merry");
-
-      TrackEntity t1 = new TrackEntity();
-      t1.setNumber(1);
-      t1.setTitle("An Old Beginning");
-      t1.setDuration(312);
-      t1.setPrimaryArtist(a1);
-      t1.addComposer(a2);
-      t1.addComposer(a3);
-      
-      TrackEntity t2 = new TrackEntity();
-      t2.setNumber(2);
-      t2.setTitle("Ferry Come Home");
-      t2.setDuration(290);
-      t2.setPrimaryArtist(a4);
-      
-      TrackEntity t3 = new TrackEntity();
-      t3.setNumber(3);
-      t3.setTitle("Wooden Shovel");
-      t3.setDuration(118);
-      t3.setPrimaryArtist(a5);
-      t3.addPerformer(a6);
-      
-      AlbumEntity al1 = new AlbumEntity();
-      al1.setTitle("Home, Sweet Home");
-      al1.setAlbumArtist(a1);
-      al1.addTrack(t1);
-      al1.addTrack(t2);
-      al1.addTrack(t3);
-
-      Model model = Model.getInstance();
-      model.getArtists().addAll(Arrays.asList(a1, a2, a3, a4, a5, a6));
-      model.getAlbums().add(al1);
+      new CreateAlbumCommand().execute();
    }
 }

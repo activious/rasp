@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -20,18 +23,32 @@ public class ListItemPanel<E extends JComponent & Editor> extends JPanel {
    private JPanel bottomPanel;
    private JButton btnEdit, btnOk, btnCancel;
    private final E editor;
+   
+   private List<ActionListener> okListeners;
+   private List<ActionListener> cancelListeners;
 
    public ListItemPanel(E editor) {
       this.editor = editor;
 
       setLayout(new GridBagLayout());
 
+      okListeners = new ArrayList<>();
+      cancelListeners = new ArrayList<>();
+
       initComponents();
       layoutComponents();
 
       // setBackground(new Color(255,100,100));
    }
-
+   
+   public void addOkListener(ActionListener l) {
+      okListeners.add(l);
+   }
+   
+   public void addCancelListener(ActionListener l) {
+      cancelListeners.add(l);
+   }
+   
    private void initComponents() {
       numberLabel = ComponentFactory.createDefaultLabel("");
       bottomPanel = new JPanel();
@@ -48,12 +65,18 @@ public class ListItemPanel<E extends JComponent & Editor> extends JPanel {
          editor.saveEdit();
          setEditable(false);
          editor.revert();
+         
+         for (ActionListener l : okListeners)
+            l.actionPerformed(e);
       });
 
       btnCancel = ComponentFactory.createDefaultButton("Annuller");
       btnCancel.addActionListener(e -> {
          setEditable(false);
          editor.revert();
+         
+         for (ActionListener l : cancelListeners)
+            l.actionPerformed(e);
       });
    }
 
