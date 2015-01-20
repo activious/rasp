@@ -76,7 +76,13 @@ public class AlbumDetailsPanel extends JPanel {
    }
 
    public void saveEdit() {
+      saveFields();
+      
       currentAlbum.setTitle(editedAlbum.getTitle());
       currentAlbum.setAlbumArtist(editedAlbum.getAlbumArtist());
+   }
+   
+   private void saveFields() {
+      editedAlbum.setTitle(titleField.getText());
    }
 }

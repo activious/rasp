@@ -50,6 +50,26 @@ public class Model {
       
       return null;
    }
+   
+   public boolean hasArtistName(String name) {
+      for (ArtistEntity a : artists) {
+         if (a.getName().equals(name))
+            return true;
+      }
+      
+      return false;
+   }
+   
+   public ArtistEntity getArtistByName(String name) {
+      for (ArtistEntity a : artists) {
+         if (a.getName().equals(name))
+            return a;
+      }
+
+      ArtistEntity a = new ArtistEntity();
+      a.setName(name);
+      return a;
+   }
 
    public ArtistEntity createArtist() {
       ArtistEntity a = new ArtistEntity();
