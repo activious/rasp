@@ -2,9 +2,11 @@ package ui.album;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 
 import javax.swing.BoxLayout;
@@ -16,6 +18,9 @@ import javax.swing.JScrollPane;
 
 
 
+
+
+import model.Model;
 import ui.ComponentFactory;
 import ui.TrackPanel;
 import ui.list.ListItemPanel;
@@ -25,13 +30,16 @@ import domain.TrackEntity;
 public class AlbumDialog extends JDialog {
    private static final long serialVersionUID = 1L;
 
-   AlbumEntity currentAlbum, editedAlbum;
+   private AlbumEntity currentAlbum, editedAlbum;
 
-   AlbumDetailsPanel detailsPanel;
-   JPanel trackList;
-   List<ListItemPanel<TrackPanel>> trackItems;
-   JButton btnAddTrack, btnOk, btnCancel;
-   JScrollPane scroller;
+   private AlbumDetailsPanel detailsPanel;
+   private JPanel trackList;
+   private List<ListItemPanel<TrackPanel>> trackItems;
+   private JButton btnAddTrack, btnOk, btnCancel;
+   private JScrollPane scroller;
+   
+   private List<ActionListener> okListeners;
+   private List<ActionListener> cancelListeners;
 
    public AlbumDialog(JFrame owner) {
       this(owner, new AlbumEntity());
@@ -44,11 +52,17 @@ public class AlbumDialog extends JDialog {
       setLayout(new BorderLayout());
 
       trackItems = new ArrayList<>();
+      okListeners = new ArrayList<>();
+      cancelListeners = new ArrayList<>();
       
       initComponents();
       layoutComponents();
 
       setAlbum(album);
+   }
+   
+   public void addOkListener(ActionListener l) {
+      okListeners.add(l);
    }
 
    private void initComponents() {
@@ -61,6 +75,7 @@ public class AlbumDialog extends JDialog {
       btnAddTrack.addActionListener(e -> {
          TrackEntity track = new TrackEntity();
          editedAlbum.addTrack(track);
+         track.setNumber(editedAlbum.getTrackList().size());
          updateTrackList();
          
          ListItemPanel<TrackPanel> item = trackItems.get(trackItems.size() - 1);
@@ -76,6 +91,12 @@ public class AlbumDialog extends JDialog {
       
       btnOk = ComponentFactory.createDefaultButton("OK");
       btnOk.addActionListener(e -> {
+         saveEdit();
+         Model.getInstance().getAlbums().add(currentAlbum);
+         dispose();
+         
+         for (ActionListener l : okListeners)
+            l.actionPerformed(e);
       });
       
       btnCancel = ComponentFactory.createDefaultButton("Annuller");
@@ -127,5 +148,6 @@ public class AlbumDialog extends JDialog {
 
    public void saveEdit() {
       detailsPanel.saveEdit();
+      currentAlbum.setTrackList(editedAlbum.getTrackList());
    }
 }

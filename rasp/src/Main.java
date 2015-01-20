@@ -135,6 +135,5 @@ public class Main {
       Window win = Window.getInstance();
       win.setVisible(true);
       win.updateAlbumList();
-      new CreateAlbumCommand().execute();
    }
 }

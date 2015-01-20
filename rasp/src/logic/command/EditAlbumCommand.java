@@ -15,6 +15,16 @@ public class EditAlbumCommand implements Command {
    @Override
    public void execute() {
       AlbumDialog d = new AlbumDialog(Window.getInstance(), album);
+
+      d.addOkListener(e -> {
+         try {
+            new SaveAlbumCommand(album).execute();
+         } catch (Exception e1) {
+            e1.printStackTrace();
+         }
+         Window.getInstance().updateAlbumList();
+      });
+      
       d.setVisible(true);
    }
 }

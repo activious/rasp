@@ -10,6 +10,16 @@ public class CreateAlbumCommand implements Command {
    public void execute() {
       AlbumEntity album = new AlbumEntity();
       AlbumDialog d = new AlbumDialog(Window.getInstance(), album);
+      
+      d.addOkListener(e -> {
+         try {
+            new SaveAlbumCommand(album).execute();
+         } catch (Exception e1) {
+            e1.printStackTrace();
+         }
+         Window.getInstance().updateAlbumList();
+      });
+      
       d.setVisible(true);
    }
 }

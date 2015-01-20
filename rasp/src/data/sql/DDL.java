@@ -8,7 +8,7 @@ public enum DDL {
    CREATE_TABLE_ALBUM("CREATE TABLE album (\n"
                       + "  albumid INTEGER PRIMARY KEY AUTOINCREMENT,\n"
                       + "  albumtitle TEXT NOT NULL,\n"
-                      + "  albumartist INTEGER NOT NULL,\n"
+                      + "  albumartist INTEGER,\n"
                       + "  FOREIGN KEY(albumartist) REFERENCES artist(artistid) ON DELETE CASCADE);"),
 
    CREATE_TABLE_TRACK("CREATE TABLE track (\n"

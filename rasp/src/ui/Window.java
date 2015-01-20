@@ -186,7 +186,7 @@ public class Window extends JFrame {
          e.printStackTrace();
       }
       
-      albumList.validate();
+      albumList.revalidate();
    }
 
 //   public void show() {
@@ -199,21 +199,21 @@ public class Window extends JFrame {
 //      testWidthOfSearchScopeButton(labels, 0, btnOnlineScope.getSize());
 //   }
 
-   private void testWidthOfSearchScopeButton(String[] labels, int index,
-                                             Dimension largerSize) {
-      if (index == labels.length) {
-         btnOnlineScope.setPreferredSize(largerSize);
-         updateSearchScopeButton();
-      } else {
-         btnOnlineScope.setText(labels[index]);
-
-         SwingUtilities.invokeLater(() -> {
-            Dimension size = btnOnlineScope.getSize();
-            if (size.width < largerSize.width)
-               size = largerSize;
-
-            testWidthOfSearchScopeButton(labels, index + 1, size);
-         });
-      }
-   }
+//   private void testWidthOfSearchScopeButton(String[] labels, int index,
+//                                             Dimension largerSize) {
+//      if (index == labels.length) {
+//         btnOnlineScope.setPreferredSize(largerSize);
+//         updateSearchScopeButton();
+//      } else {
+//         btnOnlineScope.setText(labels[index]);
+//
+//         SwingUtilities.invokeLater(() -> {
+//            Dimension size = btnOnlineScope.getSize();
+//            if (size.width < largerSize.width)
+//               size = largerSize;
+//
+//            testWidthOfSearchScopeButton(labels, index + 1, size);
+//         });
+//      }
+//   }
 }

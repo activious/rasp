@@ -9,6 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import model.Model;
+
+import org.sqlite.core.CoreDatabaseMetaData.PrimaryKeyFinder;
+
 import ui.ComponentFactory;
 import ui.TextValueField;
 import domain.AlbumEntity;
@@ -84,5 +88,8 @@ public class AlbumDetailsPanel extends JPanel {
    
    private void saveFields() {
       editedAlbum.setTitle(titleField.getText());
+      
+      String artistName = albumArtistField.getText();
+      editedAlbum.setAlbumArtist(Model.getInstance().getArtistByName(artistName));
    }
 }

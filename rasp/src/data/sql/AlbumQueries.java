@@ -51,7 +51,12 @@ public class AlbumQueries {
             "UPDATE album SET albumtitle = ?, albumartist = ? WHERE albumid = ?",
             (stmt, ent) -> {
                stmt.setString(1, ent.getTitle());
-               stmt.setInt(2, ent.getAlbumArtist().getKey());
+               
+               if (ent.getAlbumArtist() == null)
+                  stmt.setNull(2, java.sql.Types.INTEGER);
+               else
+                  stmt.setInt(2, ent.getAlbumArtist().getKey());
+               
                stmt.setInt(3, ent.getKey());
             });
    }

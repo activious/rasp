@@ -110,6 +110,7 @@ public class TopMenuBar extends JMenuBar {
       iDevRevert.addActionListener(event -> {
          try {
             new RevertProjectCommand(Config.PROJECT_NAME).execute();
+            Window.getInstance().updateAlbumList();
          } catch (Exception e) {
             e.printStackTrace();
          }

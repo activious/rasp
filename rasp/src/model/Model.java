@@ -68,6 +68,7 @@ public class Model {
 
       ArtistEntity a = new ArtistEntity();
       a.setName(name);
+      artists.add(a);
       return a;
    }
 

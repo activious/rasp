@@ -11,6 +11,8 @@ public class TrackEntity extends PersistedEntity<Integer> {
    
    public TrackEntity() {
       title = "";
+      number = 0;
+      duration = 0;
       guestArtists = new HashSet<>();
       composers = new HashSet<>();
       performers = new HashSet<>();

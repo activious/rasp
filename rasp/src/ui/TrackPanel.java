@@ -128,8 +128,9 @@ public class TrackPanel extends JPanel implements Editor {
    private void saveFields() {
       editedTrack.setTitle(titleField.getText());
 
-      if (!durationField.getText().isEmpty())
-         editedTrack.setDuration(Integer.parseInt(durationField.getText()));
+      // TODO
+//      if (!durationField.getText().isEmpty())
+//         editedTrack.setDuration(Integer.parseInt(durationField.getText()));
    }
 
    @Override
