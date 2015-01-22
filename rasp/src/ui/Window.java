@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
@@ -40,9 +41,7 @@ public class Window extends JFrame {
    
    private static final long serialVersionUID = 1L;
 
-   private static final String TITLE = "Rasp v0.1-alpha",
-         BUTTON_SEARCH_SCOPE_LOCAL = "Lokalt",
-         BUTTON_SEARCH_SCOPE_ONLINE = "Online";
+   private static final String TITLE = "Rasp v0.1-alpha";
 
    private JToggleButton btnViewAlbums, btnViewArtists;
    private JToggleButton btnLocalScope, btnOnlineScope;
@@ -54,7 +53,7 @@ public class Window extends JFrame {
    private Window() {
       super(TITLE);
       setLocation(200, 100);
-      setSize(800, 600);
+      setSize(880, 650);
       setMinimumSize(new Dimension(760, 400));
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       setJMenuBar(new TopMenuBar());
@@ -98,13 +97,15 @@ public class Window extends JFrame {
       tfSearch.addKeyListener(new KeyAdapter() {
          @Override
          public void keyReleased(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            //if (e.getKeyCode() == KeyEvent.VK_ENTER)
                new SearchCommand(tfSearch.getText()).execute();
          }
       });
 
-      albumList = new JPanel();
-      viewPane = new JScrollPane(albumList);
+      albumList = new JPanel(new GridLayout(0, 4, 8, 8));
+      JPanel albumListWrapper = new JPanel();
+      albumListWrapper.add(albumList);
+      viewPane = new JScrollPane(albumListWrapper, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
    }
 
    private void layoutComponents() {
