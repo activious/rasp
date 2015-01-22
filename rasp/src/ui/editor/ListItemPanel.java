@@ -1,4 +1,4 @@
-package ui.list;
+package ui.editor;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ui.ComponentFactory;
-import ui.edit.Editor;
 
 public class ListItemPanel<E extends JComponent & Editor> extends JPanel {
    private static final long serialVersionUID = 1L;

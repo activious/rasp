@@ -1,9 +1,8 @@
 package domain;
 
-public class ArtistEntity extends PersistedEntity<Integer> implements HasName {
+public class ArtistEntity extends PersistedEntity<Integer> {
    private String name;
 
-   @Override
    public String getName() {
       return name;
    }

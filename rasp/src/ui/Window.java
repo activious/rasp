@@ -29,6 +29,7 @@ import javax.swing.SwingUtilities;
 
 import ui.album.AlbumCover;
 import logic.command.FetchAlbumsCommand;
+import logic.command.SearchCommand;
 import model.Model;
 import domain.AlbumEntity;
 import domain.ArtistEntity;
@@ -98,18 +99,12 @@ public class Window extends JFrame {
          @Override
          public void keyReleased(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER)
-               System.out.println("You hit enter!");
+               new SearchCommand(tfSearch.getText()).execute();
          }
       });
 
       albumList = new JPanel();
       viewPane = new JScrollPane(albumList);
-   }
-
-   private void updateSearchScopeButton() {
-      btnOnlineScope.setText(btnOnlineScope.isSelected()
-            ? BUTTON_SEARCH_SCOPE_ONLINE
-            : BUTTON_SEARCH_SCOPE_LOCAL);
    }
 
    private void layoutComponents() {
@@ -174,46 +169,21 @@ public class Window extends JFrame {
    }
    
    public void updateAlbumList() {
-      albumList.removeAll();
-      
       try {
          new FetchAlbumsCommand().execute();
-         
-         for (AlbumEntity album : Model.getInstance().getAlbums())
-            albumList.add(new AlbumCover(album));
-         
+         displayAlbums(Model.getInstance().getAlbums());
       } catch (SQLException | IOException e) {
          e.printStackTrace();
       }
+   }
+   
+   public void displayAlbums(List<AlbumEntity> albums) {
+      albumList.removeAll();
+      
+      for (AlbumEntity album : albums)
+         albumList.add(new AlbumCover(album));
       
       albumList.revalidate();
+      albumList.repaint();
    }
-
-//   public void show() {
-//      setVisible(true);
-
-      // HACK? Make sure the search scope button has the width fitting
-      // the longer text label.
-//      String[] labels =
-//            { BUTTON_SEARCH_SCOPE_LOCAL, BUTTON_SEARCH_SCOPE_ONLINE };
-//      testWidthOfSearchScopeButton(labels, 0, btnOnlineScope.getSize());
-//   }
-
-//   private void testWidthOfSearchScopeButton(String[] labels, int index,
-//                                             Dimension largerSize) {
-//      if (index == labels.length) {
-//         btnOnlineScope.setPreferredSize(largerSize);
-//         updateSearchScopeButton();
-//      } else {
-//         btnOnlineScope.setText(labels[index]);
-//
-//         SwingUtilities.invokeLater(() -> {
-//            Dimension size = btnOnlineScope.getSize();
-//            if (size.width < largerSize.width)
-//               size = largerSize;
-//
-//            testWidthOfSearchScopeButton(labels, index + 1, size);
-//         });
-//      }
-//   }
 }

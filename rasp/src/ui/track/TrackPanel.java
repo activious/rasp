@@ -1,4 +1,4 @@
-package ui;
+package ui.track;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -8,8 +8,11 @@ import java.awt.Insets;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import ui.edit.Editor;
-import ui.format.ValueFormatter;
+import logic.formatter.DurationFormatter;
+import logic.parser.DurationParser;
+import logic.validator.DurationValidator;
+import ui.TextValueField;
+import ui.editor.Editor;
 import domain.TrackEntity;
 
 public class TrackPanel extends JPanel implements Editor {
@@ -43,7 +46,7 @@ public class TrackPanel extends JPanel implements Editor {
       titleField.setBold(true);
       durationField =
             new TextValueField<Integer>(4, false, false, false,
-                                        n -> ValueFormatter.formatDuration(n));
+                                        n -> new DurationFormatter().format(n));
       durationField.setAlignment(JTextField.RIGHT);
       detailsPanel = new TrackDetailsPanel();
    }
@@ -128,13 +131,14 @@ public class TrackPanel extends JPanel implements Editor {
    private void saveFields() {
       editedTrack.setTitle(titleField.getText());
 
-      // TODO
-//      if (!durationField.getText().isEmpty())
-//         editedTrack.setDuration(Integer.parseInt(durationField.getText()));
+      String duration = durationField.getText();
+      if (new DurationValidator().validate(duration))
+         editedTrack.setDuration(new DurationParser().parse(duration));
    }
 
    @Override
    public void revert() {
+      applyTrackInfo();
       detailsPanel.revert();
    }
 }

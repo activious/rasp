@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import logic.parser.DurationParser;
 import util.function.Command;
 import util.sql.DataAccess;
 import util.sql.DefaultDataAccess;
@@ -51,29 +54,57 @@ public class RevertProjectCommand implements Command {
       DataAccess<TrackEntity, Integer> trackDao =
             new DefaultDataAccess<TrackEntity, Integer>(dac);
       
-      AlbumEntity album = createAlbumByTool();
-      artistDao.create(album.getAlbumArtist(), ArtistQueries.create());
-      albumDao.create(album, AlbumQueries.create());
-      trackDao.createAll(album.getTrackList(), TrackQueries.create(album.getKey()));
+      List<AlbumEntity> albums = new ArrayList<>();
+      albums.add(createAlbumByTool());
+      albums.add(createAlbumByMetallica());
+      for (AlbumEntity a : albums) {
+         artistDao.create(a.getAlbumArtist(), ArtistQueries.create());
+         albumDao.create(a, AlbumQueries.create());
+         trackDao.createAll(a.getTrackList(), TrackQueries.create(a.getKey()));
+      }
    }
    
    private AlbumEntity createAlbumByTool() {
+      DurationParser dp = new DurationParser();
+      
       ArtistEntity artist = createArtist("Tool");
-      AlbumEntity album = createAlbum("10,000 Days", artist);
+      AlbumEntity a = createAlbum("10,000 Days", artist);
       
-      album.addTrack(createTrack(1, "Vicarious", 411, artist));
-      album.addTrack(createTrack(2, "Jambi", 411, artist));
-      album.addTrack(createTrack(3, "Wings for Marie (Part 1)", 411, artist));
-      album.addTrack(createTrack(4, "10,000 Days (Wings Part 2)", 411, artist));
-      album.addTrack(createTrack(5, "The Pot", 411, artist));
-      album.addTrack(createTrack(6, "Lipan Conjuring", 411, artist));
-      album.addTrack(createTrack(7, "Lost Keys (Blame Hofmann)", 411, artist));
-      album.addTrack(createTrack(8, "Rosetta Stoned", 411, artist));
-      album.addTrack(createTrack(9, "Intension", 411, artist));
-      album.addTrack(createTrack(10, "Right in Two", 411, artist));
-      album.addTrack(createTrack(11, "Viginti Tres", 411, artist));
+      a.addTrack(createTrack(1, "Vicarious", dp.parse("7:06"), artist));
+      a.addTrack(createTrack(2, "Jambi", dp.parse("7:28"), artist));
+      a.addTrack(createTrack(3, "Wings for Marie (Part 1)", dp.parse("6:11"), artist));
+      a.addTrack(createTrack(4, "10,000 Days (Wings Part 2)", dp.parse("11:14"), artist));
+      a.addTrack(createTrack(5, "The Pot", dp.parse("6:22"), artist));
+      a.addTrack(createTrack(6, "Lipan Conjuring", dp.parse("1:11"), artist));
+      a.addTrack(createTrack(7, "Lost Keys (Blame Hofmann)", dp.parse("3:46"), artist));
+      a.addTrack(createTrack(8, "Rosetta Stoned", dp.parse("11:11"), artist));
+      a.addTrack(createTrack(9, "Intension", dp.parse("7:21"), artist));
+      a.addTrack(createTrack(10, "Right in Two", dp.parse("8:55"), artist));
+      a.addTrack(createTrack(11, "Viginti Tres", dp.parse("5:02"), artist));
       
-      return album;
+      return a;
+   }
+   
+   private AlbumEntity createAlbumByMetallica() {
+      DurationParser dp = new DurationParser();
+      
+      ArtistEntity artist = createArtist("Metallica");
+      AlbumEntity a = createAlbum("The Black Album", artist);
+      
+      a.addTrack(createTrack(1, "Enter Sandman", dp.parse("5:29"), artist));
+      a.addTrack(createTrack(2, "Sad but True", dp.parse("5:24"), artist));
+      a.addTrack(createTrack(3, "Holier Than Thou", dp.parse("3:47"), artist));
+      a.addTrack(createTrack(4, "The Unforgiven", dp.parse("6:26"), artist));
+      a.addTrack(createTrack(5, "Wherever I May Roam", dp.parse("6:42"), artist));
+      a.addTrack(createTrack(6, "Don't Tread on Me", dp.parse("3:59"), artist));
+      a.addTrack(createTrack(7, "Through the Never", dp.parse("4:01"), artist));
+      a.addTrack(createTrack(8, "Nothing Else Matters", dp.parse("6:29"), artist));
+      a.addTrack(createTrack(9, "Of Wolf and Man", dp.parse("4:16"), artist));
+      a.addTrack(createTrack(10, "The God That Failed", dp.parse("5:05"), artist));
+      a.addTrack(createTrack(11, "My Friend of Misery", dp.parse("6:47"), artist));
+      a.addTrack(createTrack(12, "The Struggle Within", dp.parse("3:51"), artist));
+      
+      return a;
    }
    
    private ArtistEntity createArtist(String name) {

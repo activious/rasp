@@ -9,6 +9,8 @@ import java.util.List;
 
 
 
+
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -20,10 +22,12 @@ import javax.swing.JScrollPane;
 
 
 
+
+
 import model.Model;
 import ui.ComponentFactory;
-import ui.TrackPanel;
-import ui.list.ListItemPanel;
+import ui.editor.ListItemPanel;
+import ui.track.TrackPanel;
 import domain.AlbumEntity;
 import domain.TrackEntity;
 

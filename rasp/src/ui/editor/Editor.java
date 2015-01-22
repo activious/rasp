@@ -1,4 +1,4 @@
-package ui.edit;
+package ui.editor;
 
 public interface Editor {
    boolean isEditable();
