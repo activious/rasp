@@ -1,5 +1,7 @@
 package domain;
 
+import util.domain.PersistedEntity;
+
 public class GenreEntity extends PersistedEntity<Integer> {
    private String name;
 

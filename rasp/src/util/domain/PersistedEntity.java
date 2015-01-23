@@ -1,4 +1,4 @@
-package domain;
+package util.domain;
 
 import util.sql.HasKey;
 

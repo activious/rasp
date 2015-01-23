@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import util.domain.PersistedEntity;
+
 public class TrackEntity extends PersistedEntity<Integer> {
    private Integer albumKey, primaryArtistKey, number, duration;
    private String title;

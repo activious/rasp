@@ -3,6 +3,8 @@ package domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.domain.PersistedEntity;
+
 public class AlbumEntity extends PersistedEntity<Integer> {
    private String title;
    private Integer albumArtistKey;
