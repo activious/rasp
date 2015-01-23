@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import config.Config;
+import logic.config.Config;
 import util.function.Command;
 import util.sql.DataAccess;
 import util.sql.DefaultDataAccess;

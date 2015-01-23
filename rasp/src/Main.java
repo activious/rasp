@@ -14,7 +14,6 @@ import java.util.Map;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import config.Config;
 import radams.gracenote.webapi.GracenoteException;
 import radams.gracenote.webapi.GracenoteMetadata;
 import radams.gracenote.webapi.GracenoteWebAPI;
@@ -24,6 +23,7 @@ import logic.command.CreateAlbumCommand;
 import logic.command.CreateProjectCommand;
 import logic.command.ExitCommand;
 import logic.command.FetchArtistsCommand;
+import logic.config.Config;
 import domain.AlbumEntity;
 import domain.ArtistEntity;
 import domain.Model;

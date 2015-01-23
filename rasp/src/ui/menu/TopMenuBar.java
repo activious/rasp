@@ -11,7 +11,7 @@ import ui.State;
 import ui.Window;
 import logic.command.CreateAlbumCommand;
 import logic.command.RevertProjectCommand;
-import config.Config;
+import logic.config.Config;
 
 public class TopMenuBar extends JMenuBar {
    private static final long serialVersionUID = 1L;

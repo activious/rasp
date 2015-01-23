@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 
-import config.Config;
+import logic.config.Config;
 import util.function.Command;
 import util.sql.DataAccess;
 import util.sql.DefaultDataAccess;
