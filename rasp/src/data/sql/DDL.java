@@ -1,6 +1,10 @@
 package data.sql;
 
 public enum DDL {
+   CREATE_TABLE_GENRE("CREATE TABLE genre (\n"
+                      + "  genreid INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+                      + "  genrename TEXT NOT NULL);"),
+         
    CREATE_TABLE_ARTIST("CREATE TABLE artist (\n"
                        + "  artistid INTEGER PRIMARY KEY AUTOINCREMENT,\n"
                        + "  artistname TEXT NOT NULL);"),
@@ -9,17 +13,23 @@ public enum DDL {
                       + "  albumid INTEGER PRIMARY KEY AUTOINCREMENT,\n"
                       + "  albumtitle TEXT NOT NULL,\n"
                       + "  albumartist INTEGER,\n"
+                      + "  albumdiscs INTEGER,\n"
+                      + "  albumdate INTEGER,\n"
+                      + "  albumcomment TEXT,\n"
                       + "  FOREIGN KEY(albumartist) REFERENCES artist(artistid) ON DELETE CASCADE);"),
 
    CREATE_TABLE_TRACK("CREATE TABLE track (\n"
                       + "  trackid INTEGER PRIMARY KEY AUTOINCREMENT,\n"
                       + "  trackalbum INTEGER NOT NULL,\n"
                       + "  tracknumber INTEGER NOT NULL,\n"
+                      + "  trackdisc INTEGER,\n"
                       + "  tracktitle TEXT NOT NULL,\n"
                       + "  trackduration INTEGER,\n"
                       + "  trackartist INTEGER NOT NULL,\n"
+                      + "  trackgenre INTEGER,\n"
                       + "  FOREIGN KEY(trackalbum) REFERENCES album(albumid) ON DELETE CASCADE,\n"
-                      + "  FOREIGN KEY(trackartist) REFERENCES artist(artistid) ON DELETE CASCADE);"),
+                      + "  FOREIGN KEY(trackartist) REFERENCES artist(artistid) ON DELETE CASCADE,\n"
+                      + "  FOREIGN KEY(trackgenre) REFERENCES genre(genreid) ON DELETE CASCADE);"),
    
    CREATE_TABLE_GUEST_ARTIST("CREATE TABLE guestartist (\n"
                              + "  trackid INTEGER NOT NULL,\n"
