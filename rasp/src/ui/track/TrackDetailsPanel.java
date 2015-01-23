@@ -14,12 +14,12 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import model.Model;
 import ui.ComponentFactory;
 import ui.TextValueField;
 import ui.editor.Editor;
 import ui.event.ItemEvent;
 import domain.ArtistEntity;
+import domain.Model;
 import domain.TrackEntity;
 
 public class TrackDetailsPanel extends JPanel implements Editor {

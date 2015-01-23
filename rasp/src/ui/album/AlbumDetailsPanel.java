@@ -9,14 +9,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import model.Model;
-
 import org.sqlite.core.CoreDatabaseMetaData.PrimaryKeyFinder;
 
 import ui.ComponentFactory;
 import ui.TextValueField;
 import domain.AlbumEntity;
 import domain.ArtistEntity;
+import domain.Model;
 
 public class AlbumDetailsPanel extends JPanel {
    private static final long serialVersionUID = 1L;

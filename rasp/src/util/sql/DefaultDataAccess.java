@@ -151,23 +151,7 @@ public class DefaultDataAccess<T extends HasKey<K>, K> implements
    @Override
    public List<T> listAll(Object sql, StatementPreparer<K> statementPreparer,
                           ItemCreator<T> itemCreator) throws SQLException {
-      List<T> items = new ArrayList<>();
-      PreparedStatement s = null;
-      ResultSet r = null;
-      try {
-         s = conn.get().prepareStatement(sql.toString());
-         statementPreparer.prepare(s, null);
-         r = s.executeQuery();
-         while (r.next()) {
-            items.add(itemCreator.createFrom(r));
-         }
-         return items;
-      } finally {
-         if (r != null)
-            r.close();
-         if (s != null)
-            s.close();
-      }
+      return executeSelect(sql, conn, statementPreparer, itemCreator);
    }
 
    @Override
@@ -252,13 +236,41 @@ public class DefaultDataAccess<T extends HasKey<K>, K> implements
             s.close();
       }
    }
-
    public static int executeUpdate(Object sql, ConnectionSupplier conn) throws SQLException {
+      return executeUpdate(sql, conn, (s, t) -> {});
+   }
+
+   public static int executeUpdate(Object sql, ConnectionSupplier conn, StatementPreparer<Void> statementPreparer) throws SQLException {
       PreparedStatement s = null;
       try {
          s = conn.get().prepareStatement(sql.toString());
+         statementPreparer.prepare(s, null);
          return s.executeUpdate();
       } finally {
+         if (s != null)
+            s.close();
+      }
+   }
+   
+   public static <T> List<T> executeSelect(Object sql, ConnectionSupplier conn, ItemCreator<T> itemCreator) throws SQLException {
+      return executeSelect(sql, conn, (s, t) -> {}, itemCreator);
+   }
+   
+   public static <T> List<T> executeSelect(Object sql, ConnectionSupplier conn, StatementPreparer<?> statementPreparer, ItemCreator<T> itemCreator) throws SQLException {
+      List<T> items = new ArrayList<>();
+      PreparedStatement s = null;
+      ResultSet r = null;
+      try {
+         s = conn.get().prepareStatement(sql.toString());
+         statementPreparer.prepare(s, null);
+         r = s.executeQuery();
+         while (r.next()) {
+            items.add(itemCreator.createFrom(r));
+         }
+         return items;
+      } finally {
+         if (r != null)
+            r.close();
          if (s != null)
             s.close();
       }

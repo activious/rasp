@@ -1,10 +1,7 @@
-package model;
+package domain;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import domain.AlbumEntity;
-import domain.ArtistEntity;
 
 public class Model {
    private static Model INSTANCE;

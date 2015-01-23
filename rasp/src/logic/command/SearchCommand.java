@@ -7,8 +7,8 @@ import java.util.Set;
 
 import domain.AlbumEntity;
 import domain.ArtistEntity;
+import domain.Model;
 import domain.TrackEntity;
-import model.Model;
 import ui.Window;
 import util.Collections;
 import util.function.Command;

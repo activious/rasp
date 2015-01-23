@@ -31,9 +31,9 @@ import javax.swing.SwingUtilities;
 import ui.album.AlbumCover;
 import logic.command.FetchAlbumsCommand;
 import logic.command.SearchCommand;
-import model.Model;
 import domain.AlbumEntity;
 import domain.ArtistEntity;
+import domain.Model;
 import domain.TrackEntity;
 
 public class Window extends JFrame {

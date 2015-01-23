@@ -24,9 +24,9 @@ import logic.command.CreateAlbumCommand;
 import logic.command.CreateProjectCommand;
 import logic.command.ExitCommand;
 import logic.command.FetchArtistsCommand;
-import model.Model;
 import domain.AlbumEntity;
 import domain.ArtistEntity;
+import domain.Model;
 import domain.TrackEntity;
 
 public class Main {

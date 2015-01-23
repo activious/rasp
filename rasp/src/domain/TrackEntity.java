@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -84,7 +85,7 @@ public class TrackEntity extends PersistedEntity<Integer> {
       return new HashSet<>(guestArtists);
    }
    
-   public void setGuestArtists(Set<ArtistEntity> guestArtists) {
+   public void setGuestArtists(Collection<ArtistEntity> guestArtists) {
       this.guestArtists = new HashSet<>(guestArtists);
       setChanged(true);
    }
@@ -103,7 +104,7 @@ public class TrackEntity extends PersistedEntity<Integer> {
       return new HashSet<>(composers);
    }
    
-   public void setComposers(Set<ArtistEntity> composers) {
+   public void setComposers(Collection<ArtistEntity> composers) {
       this.composers = new HashSet<>(composers);
       setChanged(true);
    }
@@ -122,7 +123,7 @@ public class TrackEntity extends PersistedEntity<Integer> {
       return new HashSet<>(performers);
    }
    
-   public void setPerformers(Set<ArtistEntity> performers) {
+   public void setPerformers(Collection<ArtistEntity> performers) {
       this.performers = new HashSet<>(performers);
       setChanged(true);
    }
