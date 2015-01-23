@@ -1,4 +1,4 @@
-package ui;
+package ui.menu;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
@@ -7,10 +7,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
+import ui.State;
+import ui.Window;
 import logic.command.CreateAlbumCommand;
 import logic.command.RevertProjectCommand;
 import config.Config;
-
 
 public class TopMenuBar extends JMenuBar {
    private static final long serialVersionUID = 1L;
@@ -37,12 +38,9 @@ public class TopMenuBar extends JMenuBar {
          MN_ADD = 'T',
          MN_ADD_NEW_ALBUM = 'a',
          MN_ADD_NEW_ARTIST = 'k',
-         MN_VIEW = 'V',
-         MN_VIEW_ALBUMS = 'A',
-         MN_VIEW_ARTISTS = 'K',
-         MN_VIEW_DETAILS = 'D';
+         MN_VIEW = 'V';
    
-   public TopMenuBar() {
+   public TopMenuBar(Window win) {
       /**
        * File menu
        */
@@ -68,11 +66,10 @@ public class TopMenuBar extends JMenuBar {
          new CreateAlbumCommand().execute();
       });
       mAdd.add(iAddNewAlbum);
-      
-      //mAdd.addSeparator();
 
       JMenuItem iAddNewArtist = new JMenuItem(ITEM_ADD_NEW_ARTIST, MN_ADD_NEW_ARTIST);
       iAddNewArtist.addActionListener(e -> {});
+      iAddNewArtist.setEnabled(false); // TODO: Not yet implemented
       mAdd.add(iAddNewArtist);
       
       /**
@@ -82,12 +79,23 @@ public class TopMenuBar extends JMenuBar {
       mView.setMnemonic(MN_VIEW);
       add(mView);
 
+      State state = win.getGlobalState();
+      
       JRadioButtonMenuItem iViewAlbums = new JRadioButtonMenuItem(ITEM_VIEW_ALBUMS);
-      iViewAlbums.addActionListener(e -> {});
+      iViewAlbums.addActionListener(e -> {
+         state.setView(State.VIEW_ARTISTS);
+         win.updateState();
+      });
+      iViewAlbums.setSelected(state.getView() == State.VIEW_ALBUMS);
       mView.add(iViewAlbums);
 
       JRadioButtonMenuItem iViewArtists = new JRadioButtonMenuItem(ITEM_VIEW_ARTISTS);
-      iViewArtists.addActionListener(e -> {});
+      iViewArtists.addActionListener(e -> {
+         state.setView(State.VIEW_ARTISTS);
+         win.updateState();
+      });
+      iViewArtists.setSelected(state.getView() == State.VIEW_ARTISTS);
+      iViewArtists.setEnabled(false); // TODO: Not yet implemented
       mView.add(iViewArtists);
       
       ButtonGroup menuViewSettingsGroup = new ButtonGroup();
@@ -97,7 +105,12 @@ public class TopMenuBar extends JMenuBar {
       mView.addSeparator();
 
       JCheckBoxMenuItem iViewDetails = new JCheckBoxMenuItem(ITEM_VIEW_DETAILS);
-      iViewDetails.addActionListener(e -> {});
+      iViewDetails.addActionListener(e -> {
+         state.setDetailedView(iViewDetails.isSelected());
+         win.updateState();
+      });
+      iViewDetails.setSelected(state.isDetailedView());
+      iViewDetails.setEnabled(false); // TODO: Not yet implemented
       mView.add(iViewDetails);
       
       /**

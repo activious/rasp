@@ -58,7 +58,7 @@ public class FetchAlbumsCommand implements Command {
       
       // ArtistEntity creator fetching entity from model
       ItemCreator<ArtistEntity> creator = rs -> {
-         return model.getArtistByKey(rs.getInt(1));
+         return model.getArtistByKey(rs.getInt(2));
       };
 
       for (AlbumEntity a : model.getAlbums()) {

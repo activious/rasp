@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -29,7 +30,9 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import ui.album.AlbumCover;
+import ui.menu.TopMenuBar;
 import logic.command.FetchAlbumsCommand;
+import logic.command.OnlineSearchCommand;
 import logic.command.SearchCommand;
 import domain.AlbumEntity;
 import domain.ArtistEntity;
@@ -38,7 +41,7 @@ import domain.TrackEntity;
 
 public class Window extends JFrame {
    private static Window INSTANCE;
-   
+
    private static final long serialVersionUID = 1L;
 
    private static final String TITLE = "Rasp v0.1-alpha";
@@ -46,9 +49,11 @@ public class Window extends JFrame {
    private JToggleButton btnViewAlbums, btnViewArtists;
    private JToggleButton btnLocalScope, btnOnlineScope;
    private JTextField tfSearch;
-   
+
    private JScrollPane viewPane;
-   private JPanel albumList;
+   private JPanel albumList, albumListWrapper;
+   
+   private State state;
 
    private Window() {
       super(TITLE);
@@ -56,7 +61,6 @@ public class Window extends JFrame {
       setSize(880, 650);
       setMinimumSize(new Dimension(760, 400));
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      setJMenuBar(new TopMenuBar());
 
       List<Image> icons = new ArrayList<>();
       icons.add(new ImageIcon("assets/rasp-icon-32.png").getImage());
@@ -65,31 +69,46 @@ public class Window extends JFrame {
 
       initComponents();
       layoutComponents();
+      
+      state = new State();
+      setJMenuBar(new TopMenuBar(this));
+      updateState();
    }
-   
+
    public static Window getInstance() {
       if (INSTANCE == null)
          INSTANCE = new Window();
-      
+
       return INSTANCE;
    }
 
    private void initComponents() {
       btnViewAlbums = ComponentFactory.createDefaultToggleButton("Albums");
       btnViewAlbums.addActionListener(e -> {
+         state.setView(State.VIEW_ALBUMS);
+         updateState();
       });
 
       btnViewArtists = ComponentFactory.createDefaultToggleButton("Kunstnere");
       btnViewArtists.addActionListener(e -> {
+         state.setView(State.VIEW_ARTISTS);
+         updateState();
       });
+      btnViewArtists.setEnabled(false); // TODO: Not yet implemented
 
       btnLocalScope = ComponentFactory.createDefaultToggleButton("Mine");
       btnLocalScope.addActionListener(e -> {
+         state.setSearchScope(State.SEARCH_LOCAL);
+         updateState();
+         performLocalSearch();
          tfSearch.requestFocusInWindow();
       });
 
       btnOnlineScope = ComponentFactory.createDefaultToggleButton("Online");
       btnOnlineScope.addActionListener(e -> {
+         state.setSearchScope(State.SEARCH_ONLINE);
+         updateState();
+         displayAlbums(null);
          tfSearch.requestFocusInWindow();
       });
 
@@ -97,15 +116,21 @@ public class Window extends JFrame {
       tfSearch.addKeyListener(new KeyAdapter() {
          @Override
          public void keyReleased(KeyEvent e) {
-            //if (e.getKeyCode() == KeyEvent.VK_ENTER)
-               new SearchCommand(tfSearch.getText()).execute();
+            if (state.getSearchScope() == State.SEARCH_LOCAL)
+               performLocalSearch();
+            else if (e.getKeyCode() == KeyEvent.VK_ENTER)
+               performOnlineSearch();
          }
       });
 
       albumList = new JPanel(new GridLayout(0, 4, 8, 8));
-      JPanel albumListWrapper = new JPanel();
+      albumList.setOpaque(false);
+      albumListWrapper = new JPanel();
       albumListWrapper.add(albumList);
-      viewPane = new JScrollPane(albumListWrapper, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+      viewPane =
+            new JScrollPane(albumListWrapper,
+                            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
    }
 
    private void layoutComponents() {
@@ -149,17 +174,17 @@ public class Window extends JFrame {
       gbc.anchor = GridBagConstraints.LINE_END;
       gbc.insets = new Insets(0, 0, 0, 4);
       topPanel.add(searchPanel, gbc);
-      
+
       searchPanel.add(ComponentFactory.createDefaultLabel("Søg: "));
 
       JPanel pSearch = new JPanel();
       pSearch.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
       searchPanel.add(pSearch);
-      
+
       ButtonGroup grpScope = new ButtonGroup();
       grpScope.add(btnLocalScope);
       grpScope.add(btnOnlineScope);
-      
+
       pSearch.add(btnLocalScope);
       pSearch.add(btnOnlineScope);
       searchPanel.add(tfSearch);
@@ -168,7 +193,7 @@ public class Window extends JFrame {
       add(topPanel, BorderLayout.NORTH);
       add(viewPane, BorderLayout.CENTER);
    }
-   
+
    public void updateAlbumList() {
       try {
          new FetchAlbumsCommand().execute();
@@ -177,14 +202,52 @@ public class Window extends JFrame {
          e.printStackTrace();
       }
    }
-   
+
    public void displayAlbums(List<AlbumEntity> albums) {
       albumList.removeAll();
-      
-      for (AlbumEntity album : albums)
-         albumList.add(new AlbumCover(album));
+
+      if (albums != null) {
+         for (AlbumEntity album : albums)
+            albumList.add(new AlbumCover(album));
+      }
       
       albumList.revalidate();
       albumList.repaint();
+   }
+   
+   public State getGlobalState() {
+      return state;
+   }
+   
+   public void updateState() {
+      int view = state.getView();
+      btnViewAlbums.setSelected(view == State.VIEW_ALBUMS);
+      btnViewArtists.setSelected(view == State.VIEW_ARTISTS);
+      
+      int scope = state.getSearchScope();
+      btnLocalScope.setSelected(scope == State.SEARCH_LOCAL);
+      btnOnlineScope.setSelected(scope == State.SEARCH_ONLINE);
+      
+      Color onlineBg = new Color(200, 255, 200);
+      albumListWrapper.setBackground(scope == State.SEARCH_LOCAL ? null : onlineBg);
+      albumListWrapper.repaint();
+   }
+   
+   private void performLocalSearch() {
+      String q = tfSearch.getText().trim();
+      if (q.isEmpty())
+         updateAlbumList();
+      else
+         new SearchCommand(q).execute();
+   }
+   
+   private void performOnlineSearch() {
+      displayAlbums(null);
+      String q = tfSearch.getText().trim();
+      
+      if (!q.isEmpty()) {
+         albumList.add(ComponentFactory.createDefaultLabel("Søger på Gracenote..."));
+         SwingUtilities.invokeLater(() -> new OnlineSearchCommand(q).execute());
+      }
    }
 }

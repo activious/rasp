@@ -17,6 +17,7 @@ import data.sql.TrackArtistQueries;
 import data.sql.TrackQueries;
 import domain.AlbumEntity;
 import domain.ArtistEntity;
+import domain.Model;
 import domain.TrackEntity;
 
 public class SaveAlbumCommand implements Command {
@@ -54,12 +55,8 @@ public class SaveAlbumCommand implements Command {
       DataAccess<TrackEntity, Integer> trackDao =
             new DefaultDataAccess<TrackEntity, Integer>(dac);
 
-      ArtistEntity albumArtist = album.getAlbumArtist();
-      if (albumArtist.isPersisted()) {
-         artistDao.update(albumArtist, ArtistQueries.update());
-      } else {
-         artistDao.create(albumArtist, ArtistQueries.create());
-      }
+      artistDao.createAll(Model.getInstance().getUnsavedArtists(),
+                          ArtistQueries.create());
 
       if (album.getAlbumArtist() != null) {
          for (TrackEntity t : album.getTrackList()) {

@@ -1,6 +1,7 @@
 package ui.track;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -192,8 +193,43 @@ public class TrackDetailsPanel extends JPanel implements Editor {
       currentTrack.setPerformers(editedTrack.getPerformers());
    }
    
+   @SuppressWarnings("unchecked")
    private void saveFields() {
-      // TODO
+      Model model = Model.getInstance();
+      
+      String name = primaryArtistField.getText();
+      editedTrack.setPrimaryArtist(model.getArtistByName(name));
+      
+      TextValueField<ArtistEntity> f;
+      for (Component c : pGuestArtists.getComponents()) {
+         f = (TextValueField<ArtistEntity>) c;
+         
+         name = (f.isEditable() ? f.getText() : f.getValue().getName());
+         if (name.isEmpty())
+            continue;
+         
+         editedTrack.addGuestArtist(model.getArtistByName(name));
+      }
+      
+      for (Component c : pComposers.getComponents()) {
+         f = (TextValueField<ArtistEntity>) c;
+
+         name = (f.isEditable() ? f.getText() : f.getValue().getName());
+         if (name.isEmpty())
+            continue;
+         
+         editedTrack.addComposer(model.getArtistByName(name));
+      }
+      
+      for (Component c : pPerformers.getComponents()) {
+         f = (TextValueField<ArtistEntity>) c;
+
+         name = (f.isEditable() ? f.getText() : f.getValue().getName());
+         if (name.isEmpty())
+            continue;
+         
+         editedTrack.addPerformer(model.getArtistByName(name));
+      }
    }
 
    @Override

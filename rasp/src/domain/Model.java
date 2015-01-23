@@ -18,29 +18,21 @@ public class Model {
       return artists;
    }
    
+   public List<ArtistEntity> getUnsavedArtists() {
+      List<ArtistEntity> res = new ArrayList<>();
+      for (ArtistEntity a : artists) {
+         if (!a.isPersisted())
+            res.add(a);
+      }
+      return res;
+   }
+   
    public void setArtists(List<ArtistEntity> artists) {
       this.artists = artists;
    }
    
    public ArtistEntity getArtistByKey(int key) {
       for (ArtistEntity a : artists) {
-         if (a.getKey() == key)
-            return a;
-      }
-      
-      return null;
-   }
-
-   public List<AlbumEntity> getAlbums() {
-      return albums;
-   }
-   
-   public void setAlbums(List<AlbumEntity> albums) {
-      this.albums = albums;
-   }
-   
-   public AlbumEntity getAlbumByKey(int key) {
-      for (AlbumEntity a : albums) {
          if (a.getKey() == key)
             return a;
       }
@@ -63,10 +55,28 @@ public class Model {
             return a;
       }
 
+      // Create a new ArtistEntity if name is new
       ArtistEntity a = new ArtistEntity();
       a.setName(name);
       artists.add(a);
       return a;
+   }
+
+   public List<AlbumEntity> getAlbums() {
+      return albums;
+   }
+   
+   public void setAlbums(List<AlbumEntity> albums) {
+      this.albums = albums;
+   }
+   
+   public AlbumEntity getAlbumByKey(int key) {
+      for (AlbumEntity a : albums) {
+         if (a.getKey() == key)
+            return a;
+      }
+      
+      return null;
    }
 
    public ArtistEntity createArtist() {
